@@ -54,7 +54,7 @@ const App = () => {
           const person = persons.find(p => p.name === newName)
           const personWithNewNumber = {...person, number: newNumber}
           phonebookService.update(person.id, personWithNewNumber)
-          .then(updatedPerson => setPersons(persons.map(p => p.id === person.id ? updatedPerson : person)))
+          .then(response => setPersons(persons.map(p => p.id === response.data.id ? response.data : p)))
           .catch((error) => {
             console.log(error)
             setErrorMessage(
@@ -63,7 +63,7 @@ const App = () => {
             setTimeout(() => {
               setErrorMessage(null)
             }, 5000)
-            setPersons(person.filter(p => p.id !== person.id))
+            setPersons(persons.filter(p => p.id !== person.id))
           })
         }
     } else {

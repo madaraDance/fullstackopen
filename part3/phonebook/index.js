@@ -51,6 +51,15 @@ app.get('/api/persons/:id', (request, response) => {
   response.json(person)
 })
 
+app.put('/api/persons/:id', (request, response) => {
+  const id = request.params.id
+  const person = phonebook.find(p => p.id === id )
+  person.number = request.body.number
+  console.log(person)
+  console.log(phonebook)
+  response.json(person)
+})
+
 app.delete('/api/persons/:id', (request, response) => {
   const id = request.params.id
   phonebook = phonebook.filter(p => p.id !== id )
