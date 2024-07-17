@@ -15,15 +15,12 @@ const App = () => {
   const [message, setMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
 
-  const getAll = phonebookService.getAll()
+  useEffect(() => {
+    phonebookService.getAll()
     .then(response => {
       setPersons(response.data)
     })
     .catch(error => console.log(error))
-  
-  useEffect(() => {
-    getAll
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleSumbit = (event) => {
@@ -36,7 +33,6 @@ const App = () => {
       const person = {
         name: newName,
         number: newNumber,
-        id: `${persons.length + 1}`
       }
 
       phonebookService.addNew(person)
@@ -89,7 +85,11 @@ const App = () => {
     if(isConfirmed) {
       phonebookService.deleteEntry(person.id)
       .then(() => {
-        getAll
+        phonebookService.getAll()
+        .then(response => {
+          setPersons(response.data)
+      })
+    .catch(error => console.log(error))
       })
       .catch(error => {
         console.log(error)
