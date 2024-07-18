@@ -17,7 +17,9 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  } 
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
 
   next(error)
 }
@@ -26,14 +28,12 @@ const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
-app.get('/api/persons/', (request, response) => {
+app.get('/api/persons/', (request, response, next) => {
     Phonebook.find({})
       .then(people => {
         people ? response.status(200).json(people) : response.status(400).end()
       })
-      .catch(e => {
-        response.status(400).end()
-      })
+      .catch(e => next(e))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
@@ -45,15 +45,14 @@ app.get('/api/persons/:id', (request, response, next) => {
     .catch(e => next(e))
 })
 
-app.put('/api/persons/:id', (request, response) => {
+app.put('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
   const personToUpdate = {name: request.body.name, number: request.body.number}
-  Phonebook.findByIdAndUpdate(id, personToUpdate, {new: true})
-    .then(updatedPerson => {
-      updatedPerson ? response.status(201).json(updatedPerson) : response.status(400).end()
-    })
-    .catch(e => next(e))
-  
+  Phonebook.findByIdAndUpdate(id, personToUpdate, { new: true, runValidators: true, context: 'query' })
+  .then(updatedPerson => {
+    updatedPerson ? response.status(201).json(updatedPerson) : response.status(400).end()
+  })
+  .catch(e => next(e))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
@@ -65,7 +64,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
     .catch(e => next(e))
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const number = request.body.number
   const name = request.body.name
 
@@ -79,10 +78,7 @@ app.post('/api/persons', (request, response) => {
     .then(savedPerson => {
       savedPerson ? response.status(201).json(savedPerson) : response.status(400).end()
     })
-    .catch(e => {
-      response.status(400).end()
-    })
-
+    .catch(e => next(e))
 })
 
 app.get('/api/info', (request, response) => {
