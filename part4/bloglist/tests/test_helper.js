@@ -1,4 +1,5 @@
 const Blog = require('../models/blogpost')
+const User = require('../models/users')
 
 const initialBlogPosts = [
     {
@@ -8,7 +9,6 @@ const initialBlogPosts = [
       likes: 7,
     },
     {
-      _id: '5a422aa71b54a676234d17f8',
       title: 'Go To Statement Considered Harmful',
       author: 'Edsger W. Dijkstra',
       url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
@@ -16,6 +16,12 @@ const initialBlogPosts = [
     }
   ]
 
+const usersInDb = async () => {
+  const users = await User.find({})
+  return users.map(u => u.toJSON())
+}
+
   module.exports = {
     initialBlogPosts,
+    usersInDb
   }

@@ -1,4 +1,5 @@
 const { test, after, beforeEach, describe } = require('node:test')
+const bcrypt = require('bcryptjs')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -30,7 +31,7 @@ test('verify that BlogPost has a property id instead of _id', async () => {
 })
 
 test('verify that making an HTTP POST request to the /api/blogs URL successfully creates a new blog post', async () => {
-
+  
   const blogPost = {
     title: 'Test Title',
     author: 'Test Author',
@@ -51,6 +52,7 @@ test('verify that making an HTTP POST request to the /api/blogs URL successfully
   const nubmerOfDataEntries = response.body.length
 
   assert.strictEqual(nubmerOfDataEntries, 3)
+
 })
 
 test('verifies that if the likes property is missing from the request, it will default to the value 0', async () => {
@@ -71,12 +73,12 @@ test('verifies that if the likes property is missing from the request, it will d
 
 })
 
-test.only('verify that if the title  missing from the request data, the backend responds with the status code 400.', async () => {
+test('verify that if the title missing from the request data, the backend responds with the status code 400.', async () => {
   const blogPost = {
     author: 'Test Author',
   }
 
-  let response = await api.post('/api/blogs')
+  await api.post('/api/blogs')
     .send(blogPost)
     .expect(400)
     .expect('Content-Type', /application\/json/)
@@ -110,9 +112,7 @@ describe('verify that if the title or url properties are missing from the reques
   
   })
 
-
 })
-
 
 after(async () => {
   await mongoose.connection.close()
