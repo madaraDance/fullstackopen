@@ -18,13 +18,13 @@ const Login = ({user, setUser}) => {
     const handleLogin = async (event) => {
         event.preventDefault()
         const loggedInUser = await LoginService.loginUser({username: user.username, password: user.password})
-
         if (loggedInUser) {
             setUser((prev) => ({
                 ...prev,
                 token: loggedInUser.token,
                 name: loggedInUser.name,
-                password: ''
+                password: '',
+                id: loggedInUser.id,
             }))
             window.localStorage.setItem(
                 'loggedUser', JSON.stringify(loggedInUser)

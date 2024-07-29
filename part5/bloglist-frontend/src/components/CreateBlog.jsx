@@ -8,9 +8,8 @@ const CreateBlog = ({token, blogs, setBlogs, setNotif}) => {
     const handleBlogCreation = async (event) => {
         event.preventDefault()
         const blog = await blogService.addNewBlog(token, newBlog)
-        console.log(blog)
         if (blog) {
-            setBlogs(blogs.concat(newBlog))
+            setBlogs(blogs.concat(blog))
             setNotif(1)
         } else {
             setNotif(2)

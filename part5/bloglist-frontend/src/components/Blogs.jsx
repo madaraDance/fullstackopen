@@ -1,11 +1,14 @@
-import { useState } from 'react'
+import { useState, useRef  } from 'react'
 import Blog from './Blog'
 import CreateBlog from './CreateBlog'
 import Notification from './Notification'
 import ErrorNotification from './ErrorNotification'
+import Togglable from './Toggalable'
 
 const Blogs = ({user, setUser, blogs, setBlogs}) => {
     const [notif, setNotif] = useState(0)
+    const createBlogRef = useRef()
+    
     return (
         <>  
             { 
@@ -27,11 +30,15 @@ const Blogs = ({user, setUser, blogs, setBlogs}) => {
                 }>Log out</button>
             </div>
 
-            <CreateBlog token={user.token} blogs={blogs} setBlogs={setBlogs} setNotif={setNotif} />
+            <Togglable buttonShowLabel='New Blog' buttonHideLabel='cancel'ref={createBlogRef}>
+                <CreateBlog token={user.token} blogs={blogs} setBlogs={setBlogs} setNotif={setNotif} />
+            </Togglable>
+
+            
 
             <div style={{marginTop: 30}}>
                 {blogs.map((blog, index) => (
-                    <Blog key={index} blog={blog} />
+                    <Blog key={index} blog={blog} user={user} setBlogs={setBlogs} />
                 ))}
             </div>
 

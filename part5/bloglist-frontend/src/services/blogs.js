@@ -23,16 +23,50 @@ const addNewBlog = async (token, newBlog) => {
           Authorization: 'Bearer ' + token
         }
       }
-    );
+    )
   
     if (response.status === 201) {
+      console.log(response.data)
       return response.data
     }
   } catch (e) {
     console.log(e)
     return null
   }
-
 }
 
-export default { getAll, addNewBlog }
+const updateBlog = async (blogToUpdate, token) => {
+
+  const response = await axios.put(baseUrl, 
+    { 
+      blogToUpdate
+    },
+    {
+      headers: {
+        Authorization: 'Bearer ' + token
+      }
+    }
+  )
+
+  if (response.status === 201) {
+    return response.data
+  }
+}
+
+const deleteBlog = async (id, token) => {
+  const response = await axios.delete(`${baseUrl}/${id}`, 
+    {
+      headers: {
+        Authorization: 'Bearer ' + token
+      }
+    }
+  )
+
+  if (!response || response.status !== 200) {
+    return null
+  }
+
+  return response.data
+}
+
+export default { getAll, addNewBlog, updateBlog, deleteBlog}

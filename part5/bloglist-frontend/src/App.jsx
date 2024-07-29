@@ -5,9 +5,9 @@ import Login from './components/Login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState({username: '', name: '', password: '', token: ''})
+  const [user, setUser] = useState({username: '', name: '', password: '', token: '', id: ''})
 
-
+  console.log(blogs)
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
 
@@ -19,8 +19,10 @@ const App = () => {
 
   useEffect(() => {
     if (user.token) {
-      blogService.getAll(user.token).then(blogs =>
+      blogService.getAll(user.token).then(blogs => {
+        blogs.sort((a, b) => b.likes - a.likes)
         setBlogs(blogs)
+      }
       )
     }
   }, [user.token])
