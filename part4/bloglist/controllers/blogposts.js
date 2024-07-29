@@ -36,9 +36,9 @@ blogPostsRouter.post('/', middleware.userExtractor, async (request, response) =>
 
 })
 
-blogPostsRouter.delete('/', middleware.userExtractor, async (request, response) => {
+blogPostsRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
   const user = request.user
-  const { id } = request.body
+  const id = request.params.id
 
 
   const blogToDelete = await Blog.findById(id).populate('user', {username: 1})
@@ -57,6 +57,28 @@ blogPostsRouter.delete('/', middleware.userExtractor, async (request, response) 
   await user.save()
 
   response.status(200).send('Blog post deleted')
+})
+
+blogPostsRouter.put('/',  middleware.userExtractor, async (request, response) => {
+  const {userId, author, title, url, likes, id} = request.body.blogToUpdate
+
+  const blogToUpdate = {
+    user: userId,
+    author: author, 
+    title: title,
+    url: url,
+    likes: likes,
+  }
+
+  const updatedBlog = await Blog.findByIdAndUpdate(id, blogToUpdate, { new: true, runValidators: true, context: 'query' })
+
+  if (!updatedBlog) {
+    return response.status(400).json({error: "unable to update likes"})
+  }
+
+  response.status(201).json(updatedBlog)
+
+
 })
 
 module.exports = blogPostsRouter
