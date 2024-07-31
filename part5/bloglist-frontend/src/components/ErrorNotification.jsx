@@ -1,7 +1,7 @@
 const ErrorNotification = ({ errorMessage }) => {
-    return (
-        <>{errorMessage}</>
-    )
+  return (
+    <>{errorMessage}</>
+  )
 }
 
 export default ErrorNotification

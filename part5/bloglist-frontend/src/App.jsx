@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import { useState, useEffect } from 'react'
 import blogService from './services/blogs'
 import Blogs from './components/Blogs'
@@ -5,9 +6,8 @@ import Login from './components/Login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState({username: '', name: '', password: '', token: '', id: ''})
+  const [user, setUser] = useState({ username: '', name: '', password: '', token: '', id: '' })
 
-  console.log(blogs)
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
 
@@ -30,9 +30,9 @@ const App = () => {
   return (
     <div>
       {user.token === '' ? (
-          <Login user={user} setUser={setUser} />
+        <Login user={user} setUser={setUser} />
       ) : (
-          <Blogs user={user} setUser={setUser} blogs={blogs} setBlogs={setBlogs} />
+        <Blogs user={user} setUser={setUser} blogs={blogs} setBlogs={setBlogs} />
       )}
     </div>
   )

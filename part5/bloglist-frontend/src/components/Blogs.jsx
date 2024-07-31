@@ -26,6 +26,7 @@ const Blogs = ({user, setUser, blogs, setBlogs}) => {
                     onClick={() => {
                         window.localStorage.removeItem('loggedUser')
                         setUser({username: '', name: '', password: '', token: ''})
+                        setBlogs([])
                         }
                 }>Log out</button>
             </div>
@@ -33,8 +34,6 @@ const Blogs = ({user, setUser, blogs, setBlogs}) => {
             <Togglable buttonShowLabel='New Blog' buttonHideLabel='cancel'ref={createBlogRef}>
                 <CreateBlog token={user.token} blogs={blogs} setBlogs={setBlogs} setNotif={setNotif} />
             </Togglable>
-
-            
 
             <div style={{marginTop: 30}}>
                 {blogs.map((blog, index) => (
