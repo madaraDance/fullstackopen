@@ -3,12 +3,14 @@ module.exports = {
   env: {
     browser: true,
     es2020: true,
+    "vitest-globals/env": true
   },
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
+    'plugin:vitest-globals/recommended',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
@@ -17,11 +19,11 @@ module.exports = {
   rules: {
     "indent": [
         "error",
-        2  
+        4  
     ],
     "linebreak-style": [
         "error",
-        "unix"
+        "windows"
     ],
     "quotes": [
         "error",
