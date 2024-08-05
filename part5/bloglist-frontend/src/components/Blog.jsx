@@ -57,22 +57,23 @@ const Blog = ({ blog, user, setBlogs }) => {
   return (
     <div style={blogStyle}>
       <div style={{ display: 'flex', flexDirection: 'row', gap: 5, paddingTop: 5, paddingBottom: 5,alignItems: 'center' }}>
-        {blog.title}
-        {blog.author}
+        {blog.title} {blog.author}
         <button onClick={() => setVisibility(!visibility)}>{visibility ? 'Hide' : 'Show'}</button>
       </div>
-      <div style={controlDisplay}>
+      <div id={blog.title}style={controlDisplay}>
         <p>{blog.url}</p>
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5 }}>
           <p>{blog.likes}</p>
           <button onClick={handleLikeUpdate}>like</button>
         </div>
         <p>{blog.author}</p>
-        <button
-          onClick={handleDelete}
-          style={{ marginTop: 5, marginBottom:5 }}
+        {blog.user.id === user.id ? (
+                  <button
+                  onClick={handleDelete}
+                  style={{ marginTop: 5, marginBottom:5 }}
+                >Delete</button>
+        ): null}
 
-        >Delete</button>
       </div>
 
     </div>
