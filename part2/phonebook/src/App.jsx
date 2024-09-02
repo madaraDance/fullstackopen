@@ -46,10 +46,19 @@ const App = () => {
         setNewNumber('')
       })
       .catch(error => {
-        console.log(error.response.data.error)
+        console.log(error)
+        setErrorMessage(
+          `${error.response.data.error}`
+        )
+        setTimeout(() => {
+          setErrorMessage('')
+        }, 3000)
       })
+      
     } else if(!isNameUnique && isPhoneUnique) {
+
       const isConfirmed = window.confirm(`${newName} is already added to the phonebook, replace the old number with new one?`)
+
         if(isConfirmed) {
           const person = persons.find(p => p.name === newName)
           const personWithNewNumber = {...person, number: newNumber}
@@ -58,14 +67,15 @@ const App = () => {
           .catch((error) => {
             console.log(error)
             setErrorMessage(
-              `Person '${person.name}' was already removed from server`
+              `${error.response.data.error}`
             )
             setTimeout(() => {
-              setErrorMessage(null)
-            }, 5000)
+              setErrorMessage('')
+            }, 3000)
             setPersons(persons.filter(p => p.id !== person.id))
           })
         }
+
     } else {
       alert(`Either ${newName} or ${newNumber} are already added to phonebook`)
     }
@@ -98,7 +108,7 @@ const App = () => {
         )
         setTimeout(() => {
           setErrorMessage(null)
-        }, 5000)
+        }, 3000)
       })
     }
   }
