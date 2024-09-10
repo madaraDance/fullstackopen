@@ -1,4 +1,8 @@
 import { useState } from 'react'
+import {
+  BrowserRouter as Router,
+  Routes, Route, Link, useParams, useNavigate
+} from 'react-router-dom'
 
 const Menu = () => {
   const padding = {
@@ -6,9 +10,9 @@ const Menu = () => {
   }
   return (
     <div>
-      <a href='#' style={padding}>anecdotes</a>
-      <a href='#' style={padding}>create new</a>
-      <a href='#' style={padding}>about</a>
+      <a href='/' style={padding}>anecdotes</a>
+      <a href='/create' style={padding}>create new</a>
+      <a href='/about' style={padding}>about</a>
     </div>
   )
 }
@@ -17,10 +21,24 @@ const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
+    {anecdotes.map(anecdote => <li key={anecdote.id}><Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link></li>)}
     </ul>
   </div>
 )
+
+const Anecdote = ({anecdotes}) => 
+  { 
+    const id =  useParams().id
+    console.log(id)
+    const anecdote = anecdotes.find(an => an.id === Number(id))
+    
+    return (
+      <div>
+        <h2>{anecdote.content}</h2>
+        <p>has {anecdote.votes}</p>
+      </div>
+    )
+  }
 
 const About = () => (
   <div>
@@ -30,7 +48,7 @@ const About = () => (
     <em>An anecdote is a brief, revealing account of an individual person or an incident.
       Occasionally humorous, anecdotes differ from jokes because their primary purpose is not simply to provoke laughter but to reveal a truth more general than the brief tale itself,
       such as to characterize a person by delineating a specific quirk or trait, to communicate an abstract idea about a person, place, or thing through the concrete details of a short narrative.
-      An anecdote is "a story with a point."</em>
+      An anecdote is a story with a point.</em>
 
     <p>Software engineering is full of excellent anecdotes, at this app you can find the best and add more.</p>
   </div>
@@ -48,7 +66,7 @@ const CreateNew = (props) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
-
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -58,6 +76,11 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    props.setNotification(content)
+    setTimeout(() => {
+      props.setNotification('');
+  }, 5000);
+    navigate('/')
   }
 
   return (
@@ -83,6 +106,20 @@ const CreateNew = (props) => {
 
 }
 
+const Notification = (props) => {
+  const style = {
+    border: props.notification ? 'solid 1px black' : 'none',
+    padding: 10,
+    marginBottom: 5,
+    display: props.notification ? 'block' : 'none'
+  }
+
+  return (
+      <div style={style}>
+        { 'a new anecdote ' + props.notification + ' created!' || ''}
+      </div>
+  )
+}
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -100,6 +137,7 @@ const App = () => {
       id: 2
     }
   ])
+  
 
   const [notification, setNotification] = useState('')
 
@@ -122,15 +160,28 @@ const App = () => {
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   }
 
+  const padding = {
+    padding: 5
+  }
+
   return (
-    <div>
+    <Router>
+      <div>
       <h1>Software anecdotes</h1>
       <Menu />
-      <AnecdoteList anecdotes={anecdotes} />
-      <About />
-      <CreateNew addNew={addNew} />
-      <Footer />
-    </div>
+        <Notification notification={notification} />
+        <Routes>
+          <Route path="/" element={<AnecdoteList anecdotes={anecdotes}/>} />
+          <Route path="/create" element={<CreateNew addNew={addNew} setNotification={setNotification}/>} />
+          <Route path="/about" element={<About />} />
+          <Route path="/anecdotes/:id" element={<Anecdote anecdotes={anecdotes}/>} />
+        </Routes>
+        
+
+        <Footer />
+      </div>
+    </Router>
+
   )
 }
 
