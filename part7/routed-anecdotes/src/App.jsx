@@ -1,8 +1,11 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react'
 import {
   BrowserRouter as Router,
   Routes, Route, Link, useParams, useNavigate
 } from 'react-router-dom'
+
+import  { useField } from './hooks'
 
 const Menu = () => {
   const padding = {
@@ -63,17 +66,18 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
   const navigate = useNavigate()
+  const { reset: resetContent ,...content} = useField('content')
+  const { reset: resetAuthor ,...author} = useField('author')
+  const { reset: resetInfo ,...info} = useField('info')
+
 
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
-      content,
-      author,
-      info,
+      content : content.value,
+      author: author.value,
+      info: info.value,
       votes: 0
     })
     props.setNotification(content)
@@ -83,24 +87,31 @@ const CreateNew = (props) => {
     navigate('/')
   }
 
+const handleReset = () => {
+  resetContent()
+  resetAuthor()
+  resetInfo()
+}
+
   return (
     <div>
       <h2>create a new anecdote</h2>
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input {...content}/>
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input {...author} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input {...info} />
         </div>
         <button>create</button>
       </form>
+      <button onClick={handleReset}>reset</button>
     </div>
   )
 
@@ -116,7 +127,7 @@ const Notification = (props) => {
 
   return (
       <div style={style}>
-        { 'a new anecdote ' + props.notification + ' created!' || ''}
+        { 'a new anecdote ' + props.notification.value + ' created!' || ''}
       </div>
   )
 }
@@ -158,10 +169,6 @@ const App = () => {
     }
 
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
-  }
-
-  const padding = {
-    padding: 5
   }
 
   return (
