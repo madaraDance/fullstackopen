@@ -20,7 +20,8 @@ const App = () => {
   const dispatch = useDispatch()
   const authUser = useSelector( state => state.auth)
   const padding = {
-    padding: 5
+    padding: 5,
+    border: 'solid 1px'
   }
 
   useEffect(() => {
@@ -31,7 +32,7 @@ const App = () => {
 
   return (
     <Router>
-      <div>
+      <div style={{display: 'flex', justifyContent: "space-around", width: '6%'}}>
         <Link to="/blogs" style={padding}>blogs</Link>
         <Link to="/users" style={padding}>users</Link>
       </div>
