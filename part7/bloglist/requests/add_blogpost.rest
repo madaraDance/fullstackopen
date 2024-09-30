@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOiI2NmEwZGFmN2JlNzllYzQ4Y2IyNGIzODIiLCJpYXQiOjE3MjE4MTgwMzF9.GPqfy5AinbIXJkWYDnRx6rhOI8ShPbrkK0_uGrrPgXo
+
+{
+    "title": "Letters from America",
+    "author": "Brooke Rupert",
+    "url": "https://openlibrary.org/works/OL1826190W/Letters_from_America",
+    "likes": 0
+}
