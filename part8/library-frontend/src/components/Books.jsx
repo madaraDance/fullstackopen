@@ -1,30 +1,32 @@
 import { useState} from "react"
 import { useQuery } from '@apollo/client'
-import { BOOKS_BY_GENRE } from '../queries'
+import { ALL_BOOKS } from '../queries'
 
 const Books = (props) => {
   if (!props.show) {
     return null
   }
 
-  const booksByGenreResult = useQuery(BOOKS_BY_GENRE)
   const [chosenGenre, setGenre] = useState("")
 
-  const books = props.books 
+  const { data, loading, error, refetch } = useQuery(ALL_BOOKS, {
+    variables: { genre: chosenGenre === "" ? null : chosenGenre}
+  })
+
+  if (loading) {
+    return <div>loading...</div>
+  }
+
+  const books = data.allBooks
 
   const genres = new Set()
-  books.forEach((book) => {
+  props.books.forEach((book) => {
     book.genres.forEach((genre) => {
       genres.add(genre)
     });
   })
 
   const genreArray = Array.from(genres)
-
-  const filteredBooks = chosenGenre
-  ? books.filter((book) => book.genres.includes(chosenGenre))
-  : books;
-
 
   return (
     <div>
@@ -36,7 +38,7 @@ const Books = (props) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {filteredBooks.map((b) => (
+          {books.map((b) => (
             <tr key={b.title}>
               <td>{b.title}</td>
               <td>{b.author.name}</td>
@@ -46,7 +48,11 @@ const Books = (props) => {
         </tbody>
       </table>
       {genreArray.map((g) => (
-        <button key={g} onClick={() => setGenre(g)}>
+        <button key={g} onClick={async () =>{
+          setGenre(g)
+          props.booksResult.refetch()
+          refetch()
+          }}>
           {g}
         </button>
       ))}

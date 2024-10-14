@@ -116,9 +116,6 @@ const resolvers = {
     me: (root, args, context) => {
       return context.currentUser
     },
-    booksByGenre: async (root, args) => {
-      return await Book.find({genres: { $elemMatch: { $eq: args.genre } }}).populate('author');
-    }
   },
   Author: {
     bookCount: async (root) => await Book.countDocuments({author: root.id})

@@ -63,7 +63,7 @@ const App = () => {
       <Notify errorMessage={errorMessage} />
       <LoginForm show={page === "loginform"} setToken={setToken} setError={notify} setPage={setPage}/>
       <Authors show={page === "authors"} authors={authorsFromDB} notify={notify} />
-      <Books show={page === "books"} books={booksFromDB}/>
+      <Books show={page === "books"} books={booksFromDB} booksResult = {booksResult}/>
       <NewBook show={page === "add"} notify={notify} />
       <Reccomended show={page === "reccomended"} books={booksFromDB} user ={loggedUserFromDB} />
     </div>
