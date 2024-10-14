@@ -62,6 +62,7 @@ const typeDefs = `
     authorCount: Int!
     allBooks(authorId: ID, genre: String): [Book!]!
     allAuthors: [Author!]!
+    booksByGenre(genre: String): [Book!]!
     me: User
   }
 
@@ -115,6 +116,9 @@ const resolvers = {
     me: (root, args, context) => {
       return context.currentUser
     },
+    booksByGenre: async (root, args) => {
+      return await Book.find({genres: { $elemMatch: { $eq: args.genre } }}).populate('author');
+    }
   },
   Author: {
     bookCount: async (root) => await Book.countDocuments({author: root.id})

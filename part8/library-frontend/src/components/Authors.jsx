@@ -6,7 +6,7 @@ const Authors = (props) => {
     return null
   }
 
-  const authors = props.authors
+  const authors = props.authors || undefined
 
   return (
     <div>

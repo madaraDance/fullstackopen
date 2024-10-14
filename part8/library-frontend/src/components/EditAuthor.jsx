@@ -8,14 +8,14 @@ const EditAuthor = ({authors, notify}) => {
 
     useEffect(() => {
         if (authors.length > 0) {
-          setName(authors[0].name); // Set the first author as default once available
+          setName(authors[0].name)
         }
       }, [authors])
 
       const [ editBorn ] = useMutation(EDIT_BORN, {
         onError: (error) => {
           const messages = error.graphQLErrors.map(e => e.message).join('\n')
-          props.notify(messages)
+          notify(messages)
         }
       })
 
